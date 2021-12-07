@@ -22,7 +22,7 @@ bool goodInput = false;
 
 int selectInput = 0;
 
-bool results[5][5] = //rock, paper, scis, lzrd, spock - player
+bool results[5][5] = 				//rock, paper, scis, lzrd, spock - player
 {						{true, true, false, false, true}, //rock - comp
 						{false, true, true, true, false}, //paper
 						{true, false, true, false, true}, //scissors
