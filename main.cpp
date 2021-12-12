@@ -9,25 +9,28 @@ using namespace std;
 char DisplayMenu(); //shows menu
 void MenuOptions(char menuInput); //sorts the input
 void MainGameInput();
+
 int PlayerInput();
 int CompInput();
 void CheckResult(int playerIn, int compIn);
-void HowToPlay(); //instructions
+void GameInfo(); //information about the game
 void DisplayGameOptions(); //displays the options a user can put in
 void InitialiseGame();
 void QuitOptions();
 
 bool gameActive = false; //so the game can be replayed
-bool goodInput = false;
+bool goodInput = false; //allows return to menu
 
-int selectInput = 0;
+char playAgain;
 
-bool results[5][5] = 				//rock, paper, scis, lzrd, spock - player
-{						{true, true, false, false, true}, //rock - comp
-						{false, true, true, true, false}, //paper
-						{true, false, true, false, true}, //scissors
-						{true, false, true, true, false}, //lizard
-						{false, true, false, true, true}, }; //spock
+
+bool results[5][5] = //rock, paper, scis, lzrd, spock - player
+{					{true, true, false, false, true}, //rock - comp
+					{false, true, true, true, false}, //paper
+					{true, false, true, false, true}, //scissors
+					{true, false, true, true, false}, //lizard
+					{false, true, false, true, true}, }; //spock
+
 
 int main()
 {
@@ -56,7 +59,7 @@ char DisplayMenu()
 	cout << "||----------------------------------||" << endl;
 	cout << "|| [P] Start game                   ||" << endl;
 	cout << "||----------------------------------||" << endl;
-	cout << "|| [H] How to play                  ||" << endl;
+	cout << "|| [I] Game info                    ||" << endl;
 	cout << "||----------------------------------||" << endl;
 	cout << "|| [Q] Exit game                    ||" << endl;
 	cout << "||----------------------------------||" << endl;
@@ -79,10 +82,10 @@ void MenuOptions(char menuInput)
 		goodInput = true;
 		PlayerInput();
 		break;
-	case 'H':
-	case 'h':
+	case 'I':
+	case 'i':
 		goodInput = true;
-		HowToPlay();
+		GameInfo();
 		break;
 	case 'Q':
 	case 'q':
@@ -109,28 +112,12 @@ int PlayerInput()
 	InitialiseGame();
 
 	cout << "Choose your move: ";
-	cin >> selectInput;
+	cin >> playerIn;
 
-	switch (selectInput) {
-	case 'R':
-	case 'r':
-		playerIn = 0;
-	case 'P':
-	case 'p':
-		playerIn = 1;
-	case 'S':
-	case 's':
-		playerIn = 2;
-	case 'L':
-	case 'l':
-		playerIn = 3;
-	case 'K':
-	case 'k':
-		playerIn = 4;
-	default:
-		cout << "Invalid input! ";
+	if (playerIn < 0 || playerIn > 4)
+	{
+		cout << "Invalid Input! ";
 		system("pause");
-		system("CLS");
 		PlayerInput();
 	}
 	
@@ -150,27 +137,26 @@ void CheckResult(int playerIn, int compIn)
 {
 	//prevent ties
 
-	if (playerIn == compIn)
+	results[5][5] = results[playerIn][compIn];
+
+	if (results[5][5] == true)
 	{
-		cout << "Draw!" << endl;
+		if(playerIn = compIn)
+		{
+			cout << "Computer has rolled " << compIn << "!" << endl;
+			cout << "It's a draw!" << endl;
+			cout << "Play again [Y/N]? ";
+			cin >> playAgain;
+		}
+	}
+	else if (results[5][5] == false)
+	{
+		cout << "Computer has rolled " << compIn << "!" << endl;
+		cout << "Computer wins!" << endl;
 		cout << "Play again [Y/N]? ";
-
+		cin >> playAgain;
 	}
-	else
-	{
-		results[5][5] = results[playerIn][compIn];
-
-		if (results[5][5] == true)
-		{
-			cout << "Player wins!" << endl;
-			cout << "Play again [Y/N]? ";
-		}
-		else if (results[5][5] == false)
-		{
-			cout << "Computer wins!" << endl;
-			cout << "Play again [Y/N]? ";
-		}
-	}
+	
 }
 
 void InitialiseGame()
@@ -186,7 +172,7 @@ void DisplayGameOptions()
 
 	cout << "________________________________________________________________________________" << endl;
 	cout << "||----------------------------------------------------------------------------||" << endl;
-	cout << "|| [R] = Rock || [P] = Paper || [S] = Scissors || [L] = Lizard || [K] = Spock ||" << endl;
+	cout << "|| [0] = Rock || [1] = Paper || [2] = Scissors || [3] = Lizard || [4] = Spock ||" << endl;
 	cout << "||----------------------------------------------------------------------------||" << endl;
 	cout << "||____________________________________________________________________________||" << endl;
 	cout << endl; //formatting
@@ -195,10 +181,31 @@ void DisplayGameOptions()
 
 void QuitOptions()
 {
+	goodInput = true;
 
+	cout << "Thank you for playing. ";
+	system("pause");
+	return;
 }
 
-void HowToPlay()
+void GameInfo()
 {
+	goodInput = true;
+	system("CLS");
 
+	cout << endl; //formatting
+	cout << " Rock Paper Scissors Lizard Spock (RPSLS) is  a variant of" << endl;
+	cout << " Rock Paper Scissors that has five choices. Each choice wins against" << endl;
+	cout << " two other choices, loses against two other choices, and ties against itself:" << endl;
+	cout << " - Rock crushes Lizard and crushes Scissors" << endl;
+	cout << " - Paper disproves Spock and covers Rock" << endl;
+	cout << " - Scissors cuts Paper and decapitates Lizard" << endl;
+	cout << " - Lizard poisons Spock and eats Paper" << endl;
+	cout << " - Spock smashes Scissors and vaporises Rock" << endl;
+	cout << endl;
+	system("pause");
+
+	goodInput = false;
+
+	return;
 }
